@@ -28,7 +28,7 @@
     <artifactId>rdfdot-reactor</artifactId>
     <packaging>pom</packaging>
 
-    <name>RDF DOT (Reactor)</name>
+    <name>RDFDot (Reactor)</name>
     <description>The reactor for building the RDF DOT modules</description>
 
     <modules>

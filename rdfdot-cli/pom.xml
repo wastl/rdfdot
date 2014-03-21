@@ -28,6 +28,7 @@
     </parent>
 
     <artifactId>rdfdot-cli</artifactId>
+    <name>RDFDot: Command Line</name>
 
     <build>
         <plugins>

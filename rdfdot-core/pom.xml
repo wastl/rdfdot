@@ -28,9 +28,19 @@
     </parent>
 
     <artifactId>rdfdot-core</artifactId>
+    <name>RDFDot: Core Implementation</name>
 
     <dependencies>
+        <dependency>
+            <groupId>net.wastl.rdfdot</groupId>
+            <artifactId>rdfdot-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-rio-api</artifactId>
+        </dependency>
     </dependencies>
 
 

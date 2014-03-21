@@ -28,9 +28,18 @@
     </parent>
 
     <artifactId>rdfdot-api</artifactId>
+    <name>RDFDot: API</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.openrdf.sesame</groupId>
+            <artifactId>sesame-model</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
