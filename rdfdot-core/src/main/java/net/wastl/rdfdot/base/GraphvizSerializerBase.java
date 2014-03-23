@@ -25,10 +25,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.openrdf.model.*;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Base class for graphviz serializers
@@ -118,7 +116,6 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
     @Override
     public void serializeEdge(Statement stmt) {
         serializeNode(stmt.getSubject());
-        serializeNode(stmt.getPredicate());
         serializeNode(stmt.getObject());
 
         edges.add(stmt);
@@ -141,56 +138,80 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
     }
 
 
-    protected abstract void serializeGraphEnd();
+    protected void serializeGraphEnd() {
+        addString("}\n");
 
-    protected abstract void serializeEdges();
+        finishSerialization();
+    }
+
+    protected void serializeEdges() {
+        // Edge configuration
+        Options edgeOptions = new Options();
+        edgeOptions.addOption("arrowhead", configuration.getArrowShape());
+        edgeOptions.addOption("style", configuration.getArrowStyle());
+        edgeOptions.addOption("color", graphvizColor(configuration.getArrowColor()));
+
+        addString("\n  // edges\n");
+        addString("  edge[" + edgeOptions.toString() + "];\n");
+
+        edges.forEach(edge -> addString("  " + getNodeID(edge.getSubject()) + " -> " + getNodeID(edge.getObject()) + "[label=\""+ StringEscapeUtils.escapeJava(getNodeLabel(edge.getPredicate())) +"\"];\n"));
+    }
 
     protected void serializeLiterals() {
-        // BNode node configuration
-        Options literalOptions = new Options();
-        literalOptions.addOption("shape", configuration.getLiteralShape().toString());
-        literalOptions.addOption("style", configuration.getLiteralStyle().toString());
-        literalOptions.addOption("color", graphvizColor(configuration.getLiteralColor()));
-        if(configuration.getLiteralFill() != null && configuration.getLiteralStyle() == Styles.FILLED) {
-            literalOptions.addOption("fillcolor", graphvizColor(configuration.getLiteralFill()));
+        if(literalNodes.size() > 0) {
+            // Literal node configuration
+            Options literalOptions = new Options();
+            literalOptions.addOption("shape", configuration.getLiteralShape());
+            literalOptions.addOption("style", configuration.getLiteralStyle());
+            literalOptions.addOption("color", graphvizColor(configuration.getLiteralColor()));
+            if (configuration.getLiteralFill() != null && configuration.getLiteralStyle() == Styles.FILLED) {
+                literalOptions.addOption("fillcolor", graphvizColor(configuration.getLiteralFill()));
+            }
+
+            addString("\n  // literal nodes\n");
+            addString("  node[" + literalOptions.toString() + "];\n");
+
+            // add all URI nodes
+            literalNodes.forEach(node -> addString("  " + getNodeID(node) + " [label=\"" + StringEscapeUtils.escapeJava(getNodeLabel(node)) + "\"];\n"));
         }
-
-        addString("  node[" + literalOptions.toString() + "];\n");
-
-        // add all URI nodes
-        literalNodes.forEach(node -> addString("  " + getNodeID(node) + " [label=\"" + StringEscapeUtils.escapeJava(getNodeLabel(node)) + "\"];\n"));
     }
 
     protected void serializeBNodes() {
-        // BNode node configuration
-        Options bnodeOptions = new Options();
-        bnodeOptions.addOption("shape", configuration.getBnodeShape().toString());
-        bnodeOptions.addOption("style", configuration.getBnodeStyle().toString());
-        bnodeOptions.addOption("color", graphvizColor(configuration.getBnodeColor()));
-        if(configuration.getBnodeFill() != null && configuration.getBnodeStyle() == Styles.FILLED) {
-            bnodeOptions.addOption("fillcolor", graphvizColor(configuration.getBnodeFill()));
+        if(bnodeNodes.size() > 0) {
+            // BNode node configuration
+            Options bnodeOptions = new Options();
+            bnodeOptions.addOption("shape", configuration.getBnodeShape());
+            bnodeOptions.addOption("style", configuration.getBnodeStyle());
+            bnodeOptions.addOption("color", graphvizColor(configuration.getBnodeColor()));
+            if (configuration.getBnodeFill() != null && configuration.getBnodeStyle() == Styles.FILLED) {
+                bnodeOptions.addOption("fillcolor", graphvizColor(configuration.getBnodeFill()));
+            }
+
+            addString("\n  // blank nodes\n");
+            addString("  node[" + bnodeOptions.toString() + "];\n");
+
+            // add all URI nodes
+            bnodeNodes.forEach(node -> addString("  " + getNodeID(node) + " [label=\"" + StringEscapeUtils.escapeJava(getNodeLabel(node)) + "\"];\n"));
         }
-
-        addString("  node[" + bnodeOptions.toString() + "];\n");
-
-        // add all URI nodes
-        bnodeNodes.forEach(node -> addString("  " + getNodeID(node) + " [label=\"" + StringEscapeUtils.escapeJava(getNodeLabel(node)) + "\"];\n"));
     }
 
     protected void serializeUris() {
-        // URI node configuration
-        Options uriOptions = new Options();
-        uriOptions.addOption("shape",configuration.getUriShape().toString());
-        uriOptions.addOption("style",configuration.getUriStyle().toString());
-        uriOptions.addOption("color",graphvizColor(configuration.getUriColor()));
-        if(configuration.getUriFill() != null && configuration.getUriStyle() == Styles.FILLED) {
-            uriOptions.addOption("fillcolor", graphvizColor(configuration.getUriFill()));
+        if(uriNodes.size() > 0) {
+            // URI node configuration
+            Options uriOptions = new Options();
+            uriOptions.addOption("shape", configuration.getUriShape());
+            uriOptions.addOption("style", configuration.getUriStyle());
+            uriOptions.addOption("color", graphvizColor(configuration.getUriColor()));
+            if (configuration.getUriFill() != null && configuration.getUriStyle() == Styles.FILLED) {
+                uriOptions.addOption("fillcolor", graphvizColor(configuration.getUriFill()));
+            }
+
+            addString("\n  // uri nodes\n");
+            addString("  node[" + uriOptions.toString() + "];\n");
+
+            // add all URI nodes
+            uriNodes.forEach(node -> addString("  " + getNodeID(node) + " [label=\"" + StringEscapeUtils.escapeJava(getNodeLabel(node)) + "\"];\n"));
         }
-
-        addString("  node[" + uriOptions.toString() + "];\n");
-
-        // add all URI nodes
-        uriNodes.forEach(node -> addString("  " + getNodeID(node) + " [label=\"" + StringEscapeUtils.escapeJava(getNodeLabel(node)) + "\"];\n"));
     }
 
     protected void serializeGraphStart() {
@@ -204,7 +225,7 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
     }
 
     protected String graphvizColor(Color c) {
-        return "\"" + (255.0/c.getRed()) + " " + (255.0/c.getGreen()) + " " + (255.0/c.getBlue()) + "\"";
+        return String.format(Locale.US,"\"%.2f %.2f %.2f\"",(c.getRed()/255.0),(c.getGreen()/255.0),(c.getBlue()/255.0));
     }
 
 
@@ -235,13 +256,13 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
     private static class Options {
         private Map<String,String> data = new HashMap<>();
 
-        public void addOption(String key, String value) {
-            data.put(key,value);
+        public void addOption(String key, Object value) {
+            data.put(key,value.toString());
         }
 
         @Override
         public String toString() {
-            return StringUtils.join(data.entrySet().stream().map(input -> input.getKey() + "=" + input.getValue()), ',');
+            return StringUtils.join(data.entrySet().stream().map(input -> input.getKey() + "=" + input.getValue()).collect(Collectors.toList()), ',');
         }
     }
 }

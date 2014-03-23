@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package net.wastl.rdfdot.config;
+package net.wastl.rdfdot.render;
+
+import net.wastl.rdfdot.config.GraphConfiguration;
+import net.wastl.rdfdot.string.GraphvizSerializerString;
 
 /**
- * A reasonable selection of arrow styles for use in RDF graphs
+ * Add file description here!
  *
  * @author Sebastian Schaffert (sschaffert@apache.org)
  */
-public enum Arrows {
-    NORMAL("normal"), VEE("vee"), TEE("tee"), CURVE("curve"), DOT("dot"), DIAMOND("diamond");
+public class GraphvizSerializerNative extends GraphvizSerializerString {
 
-    private String cfg;
+    private String filename;
 
-    Arrows(String cfg) {
-        this.cfg = cfg;
+    public GraphvizSerializerNative(GraphConfiguration configuration, String filename) {
+        super(configuration);
+        this.filename = filename;
     }
 
     @Override
-    public String toString() {
-        return cfg;
+    protected void finishSerialization() {
+        render(getString(), filename);
     }
+
+    private native void render(String data, String filename);
 }
