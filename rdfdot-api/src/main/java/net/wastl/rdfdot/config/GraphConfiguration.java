@@ -137,6 +137,11 @@ public class GraphConfiguration {
         return namespaces.get(uri);
     }
 
+
+    public Map<String, String> getNamespaces() {
+        return namespaces;
+    }
+
     /**
      * Shape used for arrow heads of triples
      */

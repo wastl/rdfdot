@@ -22,5 +22,16 @@ package net.wastl.rdfdot.config;
  * @author Sebastian Schaffert (sschaffert@apache.org)
  */
 public enum Styles {
-    SOLID, DASHED, DOTTED, BOLD, FILLED
+    SOLID("solid"), DASHED("dashed"), DOTTED("dotted"), BOLD("bold"), FILLED("filled");
+
+    private String cfg;
+
+    Styles(String cfg) {
+        this.cfg = cfg;
+    }
+
+    @Override
+    public String toString() {
+        return cfg;
+    }
 }

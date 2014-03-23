@@ -23,5 +23,17 @@ package net.wastl.rdfdot.config;
  */
 public enum Shapes {
 
-    BOX, SQUARE, ELLIPSE, OVAL, CIRCLE, EGG, POINT, OCTAGON
+    BOX("box"), SQUARE("square"), ELLIPSE("ellipse"), OVAL("oval"), CIRCLE("circle"), EGG("egg"), POINT("point"), OCTAGON("octagon"), PLAINTEXT("plaintext");
+
+
+    private String cfg;
+
+    Shapes(String cfg) {
+        this.cfg = cfg;
+    }
+
+    @Override
+    public String toString() {
+        return cfg;
+    }
 }

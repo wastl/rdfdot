@@ -22,5 +22,16 @@ package net.wastl.rdfdot.config;
  * @author Sebastian Schaffert (sschaffert@apache.org)
  */
 public enum Layouts {
-    TOP_DOWN, LEFT_RIGHT, RIGHT_LEFT, BOTTOM_UP
+    TOP_DOWN("TB"), LEFT_RIGHT("LR"), RIGHT_LEFT("RL"), BOTTOM_UP("BT");
+
+    private String cfg;
+
+    Layouts(String cfg) {
+        this.cfg = cfg;
+    }
+
+    @Override
+    public String toString() {
+        return cfg;
+    }
 }
