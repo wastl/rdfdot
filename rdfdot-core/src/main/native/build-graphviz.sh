@@ -6,6 +6,11 @@ DLDIR=`readlink -f $SCRDIR/../../..`/target/native/download
 WORKDIR=`readlink -f $SCRDIR/../../..`/target/native/build
 INSTDIR=`readlink -f $SCRDIR/../../..`/target/native/graphviz
 
+if [ -f "$INSTDOR/lib/libgvc.a" ]; then
+    echo "GraphViz library already build ..."
+    exit 0
+fi
+
 echo "======================================================================="
 echo "= GraphViz: building static library for use in JNI ..."
 echo "======================================================================="
@@ -107,6 +112,6 @@ build libjpeg    "--enable-static"
 build freetype   "--enable-static"
 build fontconfig "--enable-static --sysconfdir=/etc"
 build libgd      "--enable-static --without-tiff --without-xpm --without-vpx --with-png=$INSTDIR --with-freetype=$INSTDIR --with-fontconfig=$INSTDIR"
-build graphviz   "--enable-static --with-pango=no --with-qt=no --with-pangocairo=no --with-gtk=no --without-x --with-gdk=no --with-expat=no --with-gdk-pixbuf=no --with-rsvg=no --with-gd=/tmp/graphviz --with-included-ltdl"
+build graphviz   "--enable-static --with-pango=no --with-qt=no --with-pangocairo=no --with-gtk=no --without-x --with-gdk=no --with-expat=$INSTDIR --with-gdk-pixbuf=no --with-rsvg=no --with-gd=$INSTDIR --with-included-ltdl"
 
 cd $CURDIR
