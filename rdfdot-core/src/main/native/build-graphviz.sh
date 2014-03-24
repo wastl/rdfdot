@@ -99,13 +99,13 @@ echo "======================================================================="
 echo "= building libraries ..."
 echo "======================================================================="
 
-build zlib
-build expat
-build libpng
-build libjpeg
-build freetype 
-build fontconfig "--sysconfdir=/etc"
-build libgd      "--without-tiff --without-xpm --without-vpx --with-png=$INSTDIR --with-freetype=$INSTDIR --with-fontconfig=$INSTDIR"
-build graphviz   "--with-pango=no --with-qt=no --with-pangocairo=no --with-gtk=no --without-x --with-gdk=no --with-expat=no --with-gdk-pixbuf=no --with-rsvg=no --with-gd=/tmp/graphviz --with-included-ltdl"
+build zlib       "--static"
+build expat      "--enable-static"
+build libpng     "--enable-static"
+build libjpeg    "--enable-static"
+build freetype   "--enable-static"
+build fontconfig "--enable-static --sysconfdir=/etc"
+build libgd      "--enable-static --without-tiff --without-xpm --without-vpx --with-png=$INSTDIR --with-freetype=$INSTDIR --with-fontconfig=$INSTDIR"
+build graphviz   "--enable-static --with-pango=no --with-qt=no --with-pangocairo=no --with-gtk=no --without-x --with-gdk=no --with-expat=no --with-gdk-pixbuf=no --with-rsvg=no --with-gd=/tmp/graphviz --with-included-ltdl"
 
 cd $CURDIR
