@@ -4,6 +4,8 @@
 #include "GraphvizSerializerNative.h"
 
 extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
+extern gvplugin_library_t gvplugin_gd_LTX_library;
+extern gvplugin_library_t gvplugin_core_LTX_library;
 
 JNIEXPORT void JNICALL Java_net_wastl_rdfdot_render_GraphvizSerializerNative_render(JNIEnv *env, jobject serializer, jstring jgraph, jstring jfilename) {
     const char* graph_data = (*env)->GetStringUTFChars(env,jgraph,NULL);
@@ -16,6 +18,8 @@ JNIEXPORT void JNICALL Java_net_wastl_rdfdot_render_GraphvizSerializerNative_ren
 
     gvc = gvContext();
     gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
+    gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
+    gvAddLibrary(gvc, &gvplugin_core_LTX_library);
 
     graph = agmemread(graph_data);
 
