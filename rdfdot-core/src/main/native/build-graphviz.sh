@@ -43,12 +43,12 @@ export PKG_CONFIG_PATH=$INSTDIR/lib/pkgconfig:/usr/lib/pkgconfig
 function download {
     cd $DLDIR
 
-    if [ ! -e "$1" ] || [ `md5sum $1.tar.gz` -ne "$3" ] then
+    if [ ! -e "$1" ] || [ `md5sum $1.tar.gz` -ne "$3" ]; then
 	rm -f $1.tar.gz
     	echo "downloading $1"
 	curl -L -C - -o $1.tar.gz "$2"
 
-	if [ `md5sum $1.tar.gz` -ne "$3" ] then
+	if [ `md5sum $1.tar.gz` -ne "$3" ]; then
 		echo "MD5 mismatch for file $1.tar.gz"
 		exit 1
 	fi
