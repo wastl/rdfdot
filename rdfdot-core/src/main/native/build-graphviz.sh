@@ -34,7 +34,7 @@ FREETYPE_MD5=cafe9f210e45360279c730d27bf071e9
 FONTCONFIG_HREF="http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz"
 FONTCONFIG_MD5=e75e303b4f7756c2b16203a57ac87eba
 
-EXPAT_HREF="http://freefr.dl.sourceforge.net/project/expat/2.1.0/expat-2.1.0.tar.gz"
+EXPAT_HREF="http://heanet.dl.sourceforge.net/project/expat/expat/2.1.0/expat-2.1.0.tar.gz"
 EXPAT_MD5=dd7dab7a5fea97d2a6a43f511449b7cd
 
 ZLIB_HREF="http://zlib.net/zlib-1.2.8.tar.gz"
