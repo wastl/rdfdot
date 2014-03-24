@@ -50,6 +50,7 @@ cd $WORKDIR
 export CFLAGS="-O2 -fPIC -fno-omit-frame-pointer -I$INSTDIR/include"
 export LDFLAGS="-L$INSTDIR/lib"
 export PKG_CONFIG_PATH=$INSTDIR/lib/pkgconfig:/usr/lib/pkgconfig
+export PATH=$INSTDIR/bin:$PATH
 
 function download {
     cd $DLDIR
