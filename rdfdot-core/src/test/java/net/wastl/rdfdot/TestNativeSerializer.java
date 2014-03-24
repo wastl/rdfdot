@@ -14,40 +14,38 @@
  * limitations under the License.
  */
 
-package net.wastl.rdfdot.render;
+package net.wastl.rdfdot;
 
 import net.wastl.rdfdot.config.GraphConfiguration;
+import net.wastl.rdfdot.render.GraphvizSerializerNative;
 import net.wastl.rdfdot.string.GraphvizSerializerString;
+import org.junit.Before;
+import org.junit.Test;
+import org.openrdf.rio.*;
+
+import java.io.IOException;
 
 /**
  * Add file description here!
  *
  * @author Sebastian Schaffert (sschaffert@apache.org)
  */
-public class GraphvizSerializerNative extends GraphvizSerializerString {
+public class TestNativeSerializer {
 
-    static {
-        try {
-            System.loadLibrary( "graphviz" );
-        }
-        catch( UnsatisfiedLinkError e ) {
-            System.out.println( "Could not load native code for rendering." );
-        }
+    private GraphvizSerializerNative serializer;
+    private RDFParser                parser;
+
+
+    @Before
+    public void setup() {
+        serializer = new GraphvizSerializerNative(new GraphConfiguration(),"/tmp/test.png");
+        parser     = Rio.createParser(RDFFormat.TURTLE);
+        parser.setRDFHandler(new GraphvizHandler(serializer));
     }
 
 
-
-    private String filename;
-
-    public GraphvizSerializerNative(GraphConfiguration configuration, String filename) {
-        super(configuration);
-        this.filename = filename;
+    @Test
+    public void testDefault() throws RDFParseException, IOException, RDFHandlerException {
+        parser.parse(this.getClass().getResourceAsStream("/example1.ttl"),"");
     }
-
-    @Override
-    protected void finishSerialization() {
-        render(getString(), filename);
-    }
-
-    private native void render(String data, String filename);
 }

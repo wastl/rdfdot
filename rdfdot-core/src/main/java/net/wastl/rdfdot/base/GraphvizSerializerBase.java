@@ -44,6 +44,8 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
 
     protected String id = "G";
 
+    protected boolean comments = true;
+
     public GraphvizSerializerBase(GraphConfiguration configuration) {
         this.configuration = configuration;
 
@@ -151,7 +153,9 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
         edgeOptions.addOption("style", configuration.getArrowStyle());
         edgeOptions.addOption("color", graphvizColor(configuration.getArrowColor()));
 
-        addString("\n  // edges\n");
+        if(comments) {
+            addString("\n  // edges\n");
+        }
         addString("  edge[" + edgeOptions.toString() + "];\n");
 
         edges.forEach(edge -> addString("  " + getNodeID(edge.getSubject()) + " -> " + getNodeID(edge.getObject()) + "[label=\""+ StringEscapeUtils.escapeJava(getNodeLabel(edge.getPredicate())) +"\"];\n"));
@@ -168,7 +172,9 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
                 literalOptions.addOption("fillcolor", graphvizColor(configuration.getLiteralFill()));
             }
 
-            addString("\n  // literal nodes\n");
+            if(comments) {
+                addString("\n  // literal nodes\n");
+            }
             addString("  node[" + literalOptions.toString() + "];\n");
 
             // add all URI nodes
@@ -187,7 +193,9 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
                 bnodeOptions.addOption("fillcolor", graphvizColor(configuration.getBnodeFill()));
             }
 
-            addString("\n  // blank nodes\n");
+            if(comments) {
+                addString("\n  // blank nodes\n");
+            }
             addString("  node[" + bnodeOptions.toString() + "];\n");
 
             // add all URI nodes
@@ -206,7 +214,9 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
                 uriOptions.addOption("fillcolor", graphvizColor(configuration.getUriFill()));
             }
 
-            addString("\n  // uri nodes\n");
+            if(comments) {
+                addString("\n  // uri nodes\n");
+            }
             addString("  node[" + uriOptions.toString() + "];\n");
 
             // add all URI nodes
