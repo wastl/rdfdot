@@ -64,6 +64,7 @@ function download {
 function build {
     cd $WORKDIR
     echo "building $1 ..."
+    rm -fR $1
     mkdir -p $1
     cd $1
     
