@@ -14,6 +14,7 @@ echo "- script directory: $CURDIR"
 echo "- work directory: $WORKDIR"
 
 mkdir -p $WORKDIR
+mkdir -p $DLDIR
 
 GRAPHVIZ_HREF="http://www.graphviz.org/pub/graphviz/stable/SOURCES/graphviz-2.36.0.tar.gz"
 LIBGD_HREF="https://bitbucket.org/libgd/gd-libgd/downloads/libgd-2.1.0.tar.gz"
