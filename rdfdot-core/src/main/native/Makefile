@@ -9,6 +9,9 @@ all: libgraphviz
 libgraphviz: graphviz GraphvizSerializerNative.o
 	gcc GraphvizSerializerNative.o -dynamic -shared -o libgraphviz.so $(LDFLAGS)
 
+test: graphviz test.o
+	gcc test.o -o test $(LDFLAGS) -ldl
+
 .o: 
 	gcc -c $(CFLAGS) $< -o $@
 
@@ -18,5 +21,7 @@ graphviz:
 clean:
 	rm -f *.o
 	rm -f *.so
-#	rm -fr $GRAPHVIZ_BUILD
+	rm -f test.png
+	rm -fr $(GRAPHVIZ_BUILD)
+	rm -fr $(GRAPHVIZ_HOME)
 
