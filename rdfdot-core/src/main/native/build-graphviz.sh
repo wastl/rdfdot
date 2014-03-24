@@ -47,6 +47,11 @@ function download {
 	rm -f $1.tar.gz
     	echo "downloading $1"
 	curl -L -C - -o $1.tar.gz "$2"
+
+	if [ `md5sum $1.tar.gz` -ne "$3" ] then
+		echo "MD5 mismatch for file $1.tar.gz"
+		exit 1
+	fi
     fi
 }
 
