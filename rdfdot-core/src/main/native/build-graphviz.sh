@@ -40,7 +40,7 @@ function build {
     tar xz --strip-components=1 -f ../$1.tar.gz 
 
     echo " - configuring ..."
-    ./configure --prefix=$INSTDIR --enable-static $2 > ../$1.log 2>&1
+    CFLAGS="$CFLAGS" ./configure --prefix=$INSTDIR --enable-static $2 > ../$1.log 2>&1
 
     echo " - building ..."
     make -j 4 > ../$1-build.log 2>&1 || true

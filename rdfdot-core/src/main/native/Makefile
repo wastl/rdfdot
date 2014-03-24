@@ -1,3 +1,4 @@
+GRAPHVIZ_BUILD=`readlink -f ../../..`/target/native/build
 GRAPHVIZ_HOME=`readlink -f ../../..`/target/native/graphviz
 JAVA_HOME=/usr/lib/jvm/java-8-oracle
 LDFLAGS=-L$(GRAPHVIZ_HOME)/lib -L$(GRAPHVIZ_HOME)/lib/graphviz -Wl,-Bstatic -Wl,--whole-archive -lcgraph -lgvc -lcdt -lpathplan -lgvplugin_core -lgvplugin_dot_layout -lgvplugin_gd -lgd -lpng12 -ljpeg -lfreetype -lfontconfig -Wl,--no-whole-archive -Wl,-Bdynamic -static-libgcc -lm -lltdl -ldl
@@ -17,3 +18,5 @@ graphviz:
 clean:
 	rm -f *.o
 	rm -f *.so
+#	rm -fr $GRAPHVIZ_BUILD
+
