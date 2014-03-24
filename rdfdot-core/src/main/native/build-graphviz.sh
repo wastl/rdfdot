@@ -75,7 +75,7 @@ build libpng
 build libjpeg
 build freetype 
 build fontconfig "--sysconfdir=/etc"
-build libgd      "--without-tiff --without-xpm --without-vpx"
+build libgd      "--without-tiff --without-xpm --without-vpx --with-png=$INSTDIR --with-freetype=$INSTDIR --with-fontconfig=$INSTDIR"
 build graphviz   "--with-pango=no --with-qt=no --with-pangocairo=no --with-gtk=no --without-x --with-gdk=no --with-expat=no --with-gdk-pixbuf=no --with-rsvg=no --with-gd=/tmp/graphviz --with-included-ltdl"
 
 cd $CURDIR
