@@ -21,6 +21,8 @@ import net.wastl.rdfdot.string.GraphvizSerializerString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Implementation of Graphviz Serializer using the Java JNI native library included in the source code (currently
  * works under Linux x64 only).
@@ -42,6 +44,7 @@ public class GraphvizSerializerNative extends GraphvizSerializerString {
         }
     }
 
+    private static ReentrantLock renderLock = new ReentrantLock();
 
 
     private String filename;
@@ -53,10 +56,15 @@ public class GraphvizSerializerNative extends GraphvizSerializerString {
 
     @Override
     protected void finishSerialization() {
-        log.info("rendering graph using native library call ...");
-        long start = System.currentTimeMillis();
-        render(getString(), filename);
-        log.info("finished ({}ms)!", System.currentTimeMillis()-start);
+        renderLock.lock();
+        try {
+            log.info("rendering graph using native library call ...");
+            long start = System.currentTimeMillis();
+            render(getString(), filename);
+            log.info("finished ({}ms)!", System.currentTimeMillis()-start);
+        } finally {
+            renderLock.unlock();
+        }
     }
 
     private native void render(String data, String filename);
