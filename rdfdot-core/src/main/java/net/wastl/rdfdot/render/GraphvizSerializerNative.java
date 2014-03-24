@@ -18,13 +18,17 @@ package net.wastl.rdfdot.render;
 
 import net.wastl.rdfdot.config.GraphConfiguration;
 import net.wastl.rdfdot.string.GraphvizSerializerString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Add file description here!
+ * Implementation of Graphviz Serializer using the Java JNI native library included in the source code (currently
+ * works under Linux x64 only).
  *
  * @author Sebastian Schaffert (sschaffert@apache.org)
  */
 public class GraphvizSerializerNative extends GraphvizSerializerString {
+    private static Logger log = LoggerFactory.getLogger(GraphvizSerializerNative.class);
 
     static {
         try {
@@ -46,7 +50,10 @@ public class GraphvizSerializerNative extends GraphvizSerializerString {
 
     @Override
     protected void finishSerialization() {
+        log.info("rendering graph using native library call ...");
+        long start = System.currentTimeMillis();
         render(getString(), filename);
+        log.info("finished ({}ms)!", System.currentTimeMillis()-start);
     }
 
     private native void render(String data, String filename);
