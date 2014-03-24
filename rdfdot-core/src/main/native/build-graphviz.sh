@@ -2,6 +2,7 @@
 SCRIPT=`readlink -f $0`
 SCRDIR=`dirname $SCRIPT`
 CURDIR=`pwd`
+DLDIR=`readlink -f $SCRDIR/../../..`/target/native/download
 WORKDIR=`readlink -f $SCRDIR/../../..`/target/native/build
 INSTDIR=`readlink -f $SCRDIR/../../..`/target/native/graphviz
 
@@ -27,20 +28,22 @@ export CFLAGS="-O2 -fPIC -fno-omit-frame-pointer -I$INSTDIR/include"
 export LDFLAGS="-L$INSTDIR/lib"
 
 function download {
+    cd $DLDIR
     echo "downloading $1"
     curl -L -C - -o $1.tar.gz "$2"
 }
 
 function build {
+    cd $WORKDIR
     echo "building $1 ..."
     mkdir $1
     cd $1
     
     echo " - unpacking ..."
-    tar xz --strip-components=1 -f ../$1.tar.gz 
+    tar xz --strip-components=1 -f $DLDIR/$1.tar.gz 
 
     echo " - configuring ..."
-    CFLAGS="$CFLAGS" ./configure --prefix=$INSTDIR --enable-static $2 > ../$1.log 2>&1
+    CFLAGS="$CFLAGS" ./configure --prefix=$INSTDIR --enable-static $2 > ../$1-configure.log 2>&1
 
     echo " - building ..."
     make -j 4 > ../$1-build.log 2>&1 || true
