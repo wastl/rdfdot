@@ -6,7 +6,7 @@ DLDIR=`readlink -f $SCRDIR/../../..`/target/native/download
 WORKDIR=`readlink -f $SCRDIR/../../..`/target/native/build
 INSTDIR=`readlink -f $SCRDIR/../../..`/target/native/graphviz
 
-if [ -f "$INSTDOR/lib/libgvc.a" ]; then
+if [ -f "$INSTDIR/lib/libgvc.a" ]; then
     echo "GraphViz library already build ..."
     exit 0
 fi
