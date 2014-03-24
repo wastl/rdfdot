@@ -1,0 +1,75 @@
+<!--
+  ~ Copyright 2014 Sebastian Schaffert (wastl@wastl.net)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html ng-app="rdfdotApp">
+    <head>
+        <title>RDFDot: Visualize RDF Graphs</title>
+
+        <link rel="stylesheet" href="webjars/bootstrap/3.1.1/css/bootstrap.css"/>
+        <script src="webjars/angularjs/1.2.15/angular.js"></script>
+        <script src="webjars/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.js"></script>
+        <script src="js/controllers.js"></script>
+
+        <!-- fix Bootstrap CSS for AngularJS -->
+        <style type="text/css">
+            .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+            body {
+                margin-left: 10%;
+                margin-right: 10%;
+            }
+
+        </style>
+    </head>
+
+    <body ng-controller="ConfigurationCtrl">
+
+        <div class="container-fluid">
+            <h1>RDF Visualisation</h1>
+        </div>
+
+        <div class="container-fluid">
+            <h2>Input RDF Data</h2>
+
+            <div class="input">
+                <textarea class="form-control" rows="10" ng-model="data"></textarea>
+            </div>
+
+            <div class="btn-group" style="float: right">
+                <button type="button" class="btn btn-primary" ng-click="submit()">Render</button>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <select class="form-control" ng-model="configuration.input" ng-options="input for input in inputs"></select>
+                </div>
+                <!--
+                <div class="col-md-1">
+                    <select class="form-control" ng-model="configuration.output" ng-options="output for output in outputs"></select>
+                </div>
+                -->
+            </div>
+        </div>
+
+        <div class="container-fluid" ng-show="image">
+            <h2>Generated Graph</h2>
+            <img ng-src="data:image/png;base64,{{image}}" style="max-width: 100%;"/>
+        </div>
+
+        <div class="footer container-fluid" style="text-align: center">
+            (c) 2014 Sebastian Schaffert, sschaffert@apache.org
+        </div>
+    </body>
+</html>

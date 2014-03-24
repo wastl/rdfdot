@@ -21,6 +21,7 @@ import net.wastl.rdfdot.GraphvizSerializer;
 import net.wastl.rdfdot.config.GraphConfiguration;
 import net.wastl.rdfdot.render.GraphvizSerializerCommand;
 import net.wastl.rdfdot.render.GraphvizSerializerNative;
+import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openrdf.rio.*;
@@ -38,6 +39,7 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Base64;
 
 /**
  * Web Service for rendering RDF graphs
@@ -51,7 +53,7 @@ public class RDFDotWebService {
 
     @POST
     @Path("/render")
-    public Response renderRDF(@QueryParam("input") String input, @QueryParam("output") String output, @QueryParam("backend") String backend, @Context HttpServletRequest request) {
+    public Response renderRDF(@QueryParam("input") String input, @QueryParam("output") String output, @QueryParam("backend") String backend, @QueryParam("base64") Boolean base64, @Context HttpServletRequest request) {
         if(backend == null) {
             backend = "native";
         }
@@ -78,8 +80,13 @@ public class RDFDotWebService {
                 parser.setRDFHandler(new GraphvizHandler(serializer));
                 parser.parse(request.getInputStream(), "http://localhost/");
 
-                return Response.ok((StreamingOutput) stream -> FileUtils.copyFile(tmpFile, stream))
-                               .header("Content-Type", getImageMimeType(output)).build();
+                if(base64 != null && base64) {
+                    return Response.ok((StreamingOutput) stream -> FileUtils.copyFile(tmpFile, new Base64OutputStream(stream)))
+                            .header("Content-Type", "application/base64").build();
+                } else {
+                    return Response.ok((StreamingOutput) stream -> FileUtils.copyFile(tmpFile, stream))
+                            .header("Content-Type", getImageMimeType(output)).build();
+                }
             } finally {
                 tmpFile.deleteOnExit();
             }
