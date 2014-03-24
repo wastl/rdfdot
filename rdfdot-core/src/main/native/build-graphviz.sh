@@ -36,7 +36,7 @@ function download {
 function build {
     cd $WORKDIR
     echo "building $1 ..."
-    mkdir $1
+    mkdir -p $1
     cd $1
     
     echo " - unpacking ..."
