@@ -30,9 +30,12 @@ import org.slf4j.LoggerFactory;
 public class GraphvizSerializerNative extends GraphvizSerializerString {
     private static Logger log = LoggerFactory.getLogger(GraphvizSerializerNative.class);
 
+    public static boolean available = false;
+
     static {
         try {
             System.loadLibrary( "graphviz" );
+            available = true;
         }
         catch( UnsatisfiedLinkError e ) {
             System.out.println( "Could not load native code for rendering." );

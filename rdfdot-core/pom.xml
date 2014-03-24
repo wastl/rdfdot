@@ -30,6 +30,19 @@
     <artifactId>rdfdot-core</artifactId>
     <name>RDFDot: Core Implementation</name>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <argLine>-Djava.library.path=src/main/native</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>net.wastl.rdfdot</groupId>
@@ -73,5 +86,5 @@
     </dependencies>
 
 
-    
+
 </project>
