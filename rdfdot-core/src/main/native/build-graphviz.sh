@@ -34,6 +34,12 @@ FREETYPE_MD5=cafe9f210e45360279c730d27bf071e9
 FONTCONFIG_HREF="http://www.freedesktop.org/software/fontconfig/release/fontconfig-2.11.1.tar.gz"
 FONTCONFIG_MD5=e75e303b4f7756c2b16203a57ac87eba
 
+EXPAT_HREF="http://freefr.dl.sourceforge.net/project/expat/2.1.0/expat-2.1.0.tar.gz"
+EXPAT_MD5=dd7dab7a5fea97d2a6a43f511449b7cd
+
+ZLIB_HREF="http://zlib.net/zlib-1.2.8.tar.gz"
+ZLIB_MD5=44d667c142d7cda120332623eab69f40
+
 cd $WORKDIR
 
 export CFLAGS="-O2 -fPIC -fno-omit-frame-pointer -I$INSTDIR/include"
@@ -86,11 +92,15 @@ download libpng     "$LIBPNG_HREF"     "$LIBPNG_MD5"
 download libjpeg    "$LIBJPEG_HREF"    "$LIBJPEG_MD5"
 download fontconfig "$FONTCONFIG_HREF" "$FONTCONFIG_MD5"
 download freetype   "$FREETYPE_HREF"   "$FREETYPE_MD5"
+download expat      "$EXPAT_HREF"      "$EXPAT_MD5"
+download zlib       "$ZLIB_HREF"       "$ZLIB_MD5"
 
 echo "======================================================================="
 echo "= building libraries ..."
 echo "======================================================================="
 
+build zlib
+build expat
 build libpng
 build libjpeg
 build freetype 
