@@ -79,7 +79,7 @@ To initialize the RDFHandler, use e.g. the following sequence of statements:
         GraphConfiguration configuration = new GraphConfiguration();
         GraphvizSerializer serializer = new GraphvizSerializerNative(configuration, filename);
 
-        RDFParser parser = Rio.createParser(RDFFormat.forMIMEType(RDFFormat.TURTLE));
+        RDFParser parser = Rio.createParser(RDFFormat.TURTLE);
         parser.setRDFHandler(new GraphvizHandler(serializer));
         parser.parse(in, "http://localhost/");
 
