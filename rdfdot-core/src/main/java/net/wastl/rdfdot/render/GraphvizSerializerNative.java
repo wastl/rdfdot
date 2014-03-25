@@ -17,7 +17,7 @@
 package net.wastl.rdfdot.render;
 
 import net.wastl.rdfdot.config.GraphConfiguration;
-import net.wastl.rdfdot.string.GraphvizSerializerString;
+import net.wastl.rdfdot.base.GraphvizSerializerString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,11 +47,10 @@ public class GraphvizSerializerNative extends GraphvizSerializerString {
     private static ReentrantLock renderLock = new ReentrantLock();
 
 
-    private String filename;
+    private byte[] result;
 
-    public GraphvizSerializerNative(GraphConfiguration configuration, String filename) {
+    public GraphvizSerializerNative(GraphConfiguration configuration) {
         super(configuration);
-        this.filename = filename;
     }
 
     @Override
@@ -59,14 +58,22 @@ public class GraphvizSerializerNative extends GraphvizSerializerString {
         renderLock.lock();
         try {
             log.info("rendering graph using native library call ...");
-            //log.debug("Graph: {}", getString());
+            log.debug("Graph: {}", getString());
             long start = System.currentTimeMillis();
-            render(getString(), filename);
-            log.info("finished ({}ms)!", System.currentTimeMillis()-start);
+            result = render(getString());
+            log.info("finished ({}ms)!", System.currentTimeMillis() - start);
         } finally {
             renderLock.unlock();
         }
     }
 
-    private native void render(String data, String filename);
+    /**
+     * Return the result image as byte array
+     */
+    @Override
+    public byte[] getResult() {
+        return result;
+    }
+
+    private native byte[] render(String data);
 }

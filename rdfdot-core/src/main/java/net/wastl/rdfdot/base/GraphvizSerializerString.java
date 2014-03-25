@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.wastl.rdfdot.string;
+package net.wastl.rdfdot.base;
 
 import net.wastl.rdfdot.base.GraphvizSerializerBase;
 import net.wastl.rdfdot.config.GraphConfiguration;
@@ -24,7 +24,7 @@ import net.wastl.rdfdot.config.GraphConfiguration;
  *
  * @author Sebastian Schaffert (sschaffert@apache.org)
  */
-public class GraphvizSerializerString extends GraphvizSerializerBase {
+public abstract class GraphvizSerializerString extends GraphvizSerializerBase {
 
     StringBuilder builder;
 

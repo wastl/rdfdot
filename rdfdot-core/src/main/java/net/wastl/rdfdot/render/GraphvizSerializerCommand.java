@@ -16,16 +16,15 @@
 
 package net.wastl.rdfdot.render;
 
-import net.wastl.rdfdot.base.GraphvizSerializerBase;
 import net.wastl.rdfdot.config.GraphConfiguration;
-import net.wastl.rdfdot.string.GraphvizSerializerString;
+import net.wastl.rdfdot.base.GraphvizSerializerString;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * Add file description here!
@@ -37,6 +36,11 @@ public class GraphvizSerializerCommand extends GraphvizSerializerString {
     private static Logger log = LoggerFactory.getLogger(GraphvizSerializerCommand.class);
 
     private String filename;
+
+    public GraphvizSerializerCommand(GraphConfiguration configuration) {
+        super(configuration);
+        this.filename = FileUtils.getTempDirectoryPath() + File.separator + RandomStringUtils.randomAlphabetic(8) + ".png";
+    }
 
     public GraphvizSerializerCommand(GraphConfiguration configuration, String filename) {
         super(configuration);
@@ -71,5 +75,17 @@ public class GraphvizSerializerCommand extends GraphvizSerializerString {
             log.error("command execution interrupted");
         }
 
+    }
+
+    /**
+     * Return the result image as byte array
+     */
+    @Override
+    public byte[] getResult() {
+        try {
+            return FileUtils.readFileToByteArray(new File(filename));
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

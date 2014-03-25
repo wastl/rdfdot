@@ -18,8 +18,6 @@ package net.wastl.rdfdot;
 
 import net.wastl.rdfdot.config.GraphConfiguration;
 import net.wastl.rdfdot.render.GraphvizSerializerNative;
-import net.wastl.rdfdot.string.GraphvizSerializerString;
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,17 +33,14 @@ import java.io.IOException;
  */
 public class TestNativeSerializer {
 
-    public static final String FILENAME = "/tmp/test-native.png";
-
     private GraphvizSerializerNative serializer;
     private RDFParser                parser;
 
 
     @Before
     public void setup() {
-        (new File(FILENAME)).delete();
 
-        serializer = new GraphvizSerializerNative(new GraphConfiguration(), FILENAME);
+        serializer = new GraphvizSerializerNative(new GraphConfiguration());
         parser     = Rio.createParser(RDFFormat.TURTLE);
         parser.setRDFHandler(new GraphvizHandler(serializer));
     }
@@ -55,7 +50,7 @@ public class TestNativeSerializer {
     public void testDefault() throws RDFParseException, IOException, RDFHandlerException {
         parser.parse(this.getClass().getResourceAsStream("/example1.ttl"),"");
 
-        File result = new File(FILENAME);
-        Assert.assertTrue(result.exists());
+        byte[] image = serializer.getResult();
+        Assert.assertTrue(image.length > 0);
     }
 }

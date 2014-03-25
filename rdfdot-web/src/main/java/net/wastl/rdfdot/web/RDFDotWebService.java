@@ -26,6 +26,7 @@ import net.wastl.rdfdot.render.GraphvizSerializerCommand;
 import net.wastl.rdfdot.render.GraphvizSerializerNative;
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openrdf.rio.*;
 import org.slf4j.Logger;
@@ -100,13 +101,13 @@ public class RDFDotWebService {
         if(arrow_style != null) configuration.setArrowStyle(arrow_style);
 
         try {
-            File tmpFile = File.createTempFile("rdfdot", ".png");
-            try {
                 GraphvizSerializer serializer;
                 if (StringUtils.equalsIgnoreCase(backend, "native")) {
-                    serializer = new GraphvizSerializerNative(configuration, tmpFile.getAbsolutePath());
+                    serializer = new GraphvizSerializerNative(configuration);
                 } else {
+                    File tmpFile = File.createTempFile("rdfdot", ".png");
                     serializer = new GraphvizSerializerCommand(configuration, tmpFile.getAbsolutePath());
+                    tmpFile.deleteOnExit();
                 }
 
                 RDFParser parser = Rio.createParser(RDFFormat.forMIMEType(getRDFMimeType(input)));
@@ -114,15 +115,12 @@ public class RDFDotWebService {
                 parser.parse(request.getInputStream(), "http://localhost/");
 
                 if(base64 != null && base64) {
-                    return Response.ok((StreamingOutput) stream -> FileUtils.copyFile(tmpFile, new Base64OutputStream(stream)))
+                    return Response.ok((StreamingOutput) stream -> IOUtils.write(serializer.getResult(), new Base64OutputStream(stream)))
                             .header("Content-Type", "application/base64").build();
                 } else {
-                    return Response.ok((StreamingOutput) stream -> FileUtils.copyFile(tmpFile, stream))
+                    return Response.ok((StreamingOutput) stream -> IOUtils.write(serializer.getResult(), stream))
                             .header("Content-Type", getImageMimeType(output)).build();
                 }
-            } finally {
-                tmpFile.deleteOnExit();
-            }
         } catch (IOException e) {
             return Response.serverError().entity(e.getMessage()).build();
         } catch (RDFHandlerException e) {

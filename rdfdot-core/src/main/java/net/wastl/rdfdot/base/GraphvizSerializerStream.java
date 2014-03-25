@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.wastl.rdfdot.stream;
+package net.wastl.rdfdot.base;
 
 import net.wastl.rdfdot.base.GraphvizSerializerBase;
 import net.wastl.rdfdot.config.GraphConfiguration;
@@ -29,7 +29,7 @@ import java.io.Writer;
  *
  * @author Sebastian Schaffert (sschaffert@apache.org)
  */
-public class GraphvizSerializerStream extends GraphvizSerializerBase {
+public abstract class GraphvizSerializerStream extends GraphvizSerializerBase {
 
     private PrintWriter out;
 

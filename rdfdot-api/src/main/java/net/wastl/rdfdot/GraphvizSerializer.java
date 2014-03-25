@@ -71,4 +71,9 @@ public interface GraphvizSerializer {
      */
     public void endGraph();
 
+
+    /**
+     * Return the result image as byte array
+     */
+    public byte[] getResult();
 }

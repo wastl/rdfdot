@@ -10,10 +10,11 @@ extern "C" {
 /*
  * Class:     net_wastl_rdfdot_render_GraphvizSerializerNative
  * Method:    render
- * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;)[B
  */
-JNIEXPORT void JNICALL Java_net_wastl_rdfdot_render_GraphvizSerializerNative_render
-  (JNIEnv *, jobject, jstring, jstring);
+JNIEXPORT jbyteArray JNICALL Java_net_wastl_rdfdot_render_GraphvizSerializerNative_render
+  (JNIEnv *, jobject, jstring);
+
 
 #ifdef __cplusplus
 }

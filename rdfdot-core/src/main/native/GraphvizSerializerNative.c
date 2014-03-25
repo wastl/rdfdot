@@ -7,20 +7,29 @@ extern gvplugin_library_t gvplugin_dot_layout_LTX_library;
 extern gvplugin_library_t gvplugin_gd_LTX_library;
 extern gvplugin_library_t gvplugin_core_LTX_library;
 
-JNIEXPORT void JNICALL Java_net_wastl_rdfdot_render_GraphvizSerializerNative_render(JNIEnv *env, jobject serializer, jstring jgraph, jstring jfilename) {
+JNIEXPORT jbyteArray JNICALL Java_net_wastl_rdfdot_render_GraphvizSerializerNative_render(JNIEnv *env, jobject serializer, jstring jgraph) {
+    // copy over the graph specification from the Java String to a C char array
     const char* graph_data = (*env)->GetStringUTFChars(env,jgraph,NULL);
-    const char* filename   = (*env)->GetStringUTFChars(env,jfilename,NULL);
 
     GVC_t* gvc;      // context
     Agraph_t* graph; // graph
 
+    char* result_data = NULL;   // resulting byte array, allocated by gvRenderData
+    int   result_length = 0;    // length of resulting byte array, set by gvRenderData
+
+    jbyteArray result;
+
     printf("GraphViz: building graph ...\n");
 
+    // setup graphviz context
     gvc = gvContext();
+
+    // add the plugin libraries explicitly, since we have no dynamic loading
     gvAddLibrary(gvc, &gvplugin_dot_layout_LTX_library);
     gvAddLibrary(gvc, &gvplugin_gd_LTX_library);
     gvAddLibrary(gvc, &gvplugin_core_LTX_library);
 
+    // read graph from in-memory string representation
     graph = agmemread(graph_data);
 
     if(!graph) {
@@ -28,17 +37,26 @@ JNIEXPORT void JNICALL Java_net_wastl_rdfdot_render_GraphvizSerializerNative_ren
         return;
     }
 
+    // call graphviz dot layouter
     printf("GraphViz: layouting graph ...\n");
     gvLayout(gvc,graph, "dot");
 
-    printf("GraphViz: rendering graph to %s ...\n", filename);
-    gvRenderFilename(gvc,graph,"png",filename);
-    //gvRender(gvc, graph, "plain", stdout);
+    // render graph to in-memory byte array
+    printf("GraphViz: rendering graph ...\n");
+    gvRenderData(gvc, graph, "png", &result_data, &result_length);
 
+    // copy data over to java byte array
+    printf("GraphViz: copying data (%d bytes)\n", result_length);
+    result = (*env)->NewByteArray(env,result_length);
+    (*env)->SetByteArrayRegion(env,result,0,result_length,(jbyte*)result_data);
+    gvFreeRenderData(result_data);
+
+    // free resources
     printf("GraphViz: cleaning up ...\n");
     gvFreeLayout(gvc,graph);
     agclose(graph);
 
-    (*env)->ReleaseStringUTFChars(env,jfilename,filename);
     (*env)->ReleaseStringUTFChars(env,jgraph,graph_data);
+
+    return result;
 }
