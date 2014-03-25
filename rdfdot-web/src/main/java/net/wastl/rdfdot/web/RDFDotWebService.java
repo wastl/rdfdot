@@ -18,7 +18,10 @@ package net.wastl.rdfdot.web;
 
 import net.wastl.rdfdot.GraphvizHandler;
 import net.wastl.rdfdot.GraphvizSerializer;
+import net.wastl.rdfdot.config.Arrows;
 import net.wastl.rdfdot.config.GraphConfiguration;
+import net.wastl.rdfdot.config.Shapes;
+import net.wastl.rdfdot.config.Styles;
 import net.wastl.rdfdot.render.GraphvizSerializerCommand;
 import net.wastl.rdfdot.render.GraphvizSerializerNative;
 import org.apache.commons.codec.binary.Base64OutputStream;
@@ -36,6 +39,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -53,7 +57,23 @@ public class RDFDotWebService {
 
     @POST
     @Path("/render")
-    public Response renderRDF(@QueryParam("input") String input, @QueryParam("output") String output, @QueryParam("backend") String backend, @QueryParam("base64") Boolean base64, @Context HttpServletRequest request) {
+    public Response renderRDF(@QueryParam("input") String input,
+                              @QueryParam("output") String output,
+                              @QueryParam("backend") String backend,
+                              @QueryParam("base64") Boolean base64,
+                              @QueryParam("uri_shape") Shapes uri_shape,
+                              @QueryParam("uri_fill")  String uri_fill,
+                              @QueryParam("uri_style") Styles uri_style,
+                              @QueryParam("bnode_shape") Shapes bnode_shape,
+                              @QueryParam("bnode_fill")  String bnode_fill,
+                              @QueryParam("bnode_style") Styles bnode_style,
+                              @QueryParam("literal_shape") Shapes literal_shape,
+                              @QueryParam("literal_fill")  String literal_fill,
+                              @QueryParam("literal_style") Styles literal_style,
+                              @QueryParam("arrow_shape") Arrows arrow_shape,
+                              @QueryParam("arrow_color")  String arrow_color,
+                              @QueryParam("arrow_style") Styles arrow_style,
+                              @Context HttpServletRequest request) {
         if(backend == null) {
             backend = "native";
         }
@@ -65,6 +85,19 @@ public class RDFDotWebService {
         }
 
         GraphConfiguration configuration = new GraphConfiguration();
+
+        if(uri_shape != null) configuration.setUriShape(uri_shape);
+        if(uri_fill  != null) configuration.setUriFill(parseColor(uri_fill));
+        if(uri_style != null) configuration.setUriStyle(uri_style);
+        if(bnode_shape != null) configuration.setBnodeShape(bnode_shape);
+        if(bnode_fill  != null) configuration.setBnodeFill(parseColor(bnode_fill));
+        if(bnode_style != null) configuration.setBnodeStyle(bnode_style);
+        if(literal_shape != null) configuration.setLiteralShape(literal_shape);
+        if(literal_fill  != null) configuration.setLiteralFill(parseColor(literal_fill));
+        if(literal_style != null) configuration.setLiteralStyle(literal_style);
+        if(arrow_shape != null) configuration.setArrowShape(arrow_shape);
+        if(arrow_color  != null) configuration.setArrowColor(parseColor(arrow_color));
+        if(arrow_style != null) configuration.setArrowStyle(arrow_style);
 
         try {
             File tmpFile = File.createTempFile("rdfdot", ".png");
@@ -120,5 +153,9 @@ public class RDFDotWebService {
             default:
                 return "image/png";
         }
+    }
+
+    private Color parseColor(String hex) {
+        return new Color(Integer.parseInt(hex.substring(1), 16));
     }
 }

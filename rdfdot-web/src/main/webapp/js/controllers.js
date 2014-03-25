@@ -17,7 +17,7 @@
 /**
  * Created by wastl on 24.03.14.
  */
-var rdfdotApp = angular.module('rdfdotApp', ['ui.bootstrap']);
+var rdfdotApp = angular.module('rdfdotApp', ['ui.bootstrap','colorpicker.module']);
 
 rdfdotApp.controller("ConfigurationCtrl", function($scope,$http) {
 
@@ -28,17 +28,98 @@ rdfdotApp.controller("ConfigurationCtrl", function($scope,$http) {
 
     $scope.configuration = {
         'input': 'turtle',
-        'output': 'png'
+        'output': 'png',
+        'base64': 'true',
+
+        uri_shape: 'OVAL',
+        uri_fill:  "#ffffff",
+        uri_style: 'SOLID',
+
+        bnode_shape: 'POINT',
+        bnode_fill:  '#ffffff',
+        bnode_style: 'SOLID',
+
+        literal_shape: 'BOX',
+        literal_fill:  '#B24CFF',
+        literal_style: 'FILLED',
+
+        arrow_shape: 'VEE',
+        arrow_style: 'SOLID',
+        arrow_color: '#000000'
     };
 
+
     $scope.image = null;
+    $scope.alerts = [];
 
     $scope.submit = function() {
 
-        $http.post("render?base64=true&input="+$scope.configuration.input,$scope.data).success(function(img) {
-            console.log(img);
-            $scope.image = img;
-        });
-    }
+
+        $http.post("render",$scope.data,{ 'params': $scope.configuration }).
+            success(function(img) {
+                console.log(img);
+                $scope.image = img;
+            }).
+            error(function(data,status) {
+                $scope.addAlert(data);
+            });
+    };
+
+    $scope.addAlert = function(msg) {
+        $scope.alerts.push({ type: 'danger', 'msg': msg});
+    };
+
+    $scope.closeAlert = function(idx) {
+        $scope.alerts.splice(idx, 1);
+    };
+
+    // show configuration panel
+    $scope.show_configuration = false;
+
+
+    $scope.node_shapes = ['OVAL','ELLIPSE','EGG','CIRCLE', 'BOX','SQUARE', 'POINT', 'OCTAGON', 'PLAINTEXT'];
+    $scope.node_styles = ['SOLID', 'DASHED', 'DOTTED', 'FILLED', 'BOLD'];
+
+    $scope.arrow_shapes = ['NORMAL', 'VEE', 'TEE', 'CURVE', 'DOT', 'DIAMOND'];
+    $scope.arrow_styles = ['SOLID', 'DASHED', 'DOTTED', 'BOLD'];
+
+
+
+    // color configuration
+    $scope.uri_css = {
+        'background-color': $scope.configuration.uri_fill
+    };
+
+    $scope.$watch('configuration.uri_fill', function() {
+        $scope.uri_css['background-color'] = $scope.configuration.uri_fill;
+    });
+
+
+    $scope.bnode_css = {
+        'background-color': $scope.configuration.bnode_fill
+    };
+
+    $scope.$watch('configuration.bnode_fill', function() {
+        $scope.bnode_css['background-color'] = $scope.configuration.bnode_fill;
+    });
+
+
+    $scope.literal_css = {
+        'background-color': $scope.configuration.literal_fill
+    };
+
+    $scope.$watch('configuration.literal_fill', function() {
+        $scope.literal_css['background-color'] = $scope.configuration.literal_fill;
+    });
+
+
+    $scope.edge_css = {
+        'background-color': $scope.configuration.arrow_color
+    };
+
+    $scope.$watch('configuration.arrow_color', function() {
+        $scope.edge_css['background-color'] = $scope.configuration.arrow_color;
+    });
+
 });
 

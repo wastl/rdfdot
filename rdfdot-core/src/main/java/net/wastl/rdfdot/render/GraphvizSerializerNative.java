@@ -59,6 +59,7 @@ public class GraphvizSerializerNative extends GraphvizSerializerString {
         renderLock.lock();
         try {
             log.info("rendering graph using native library call ...");
+            //log.debug("Graph: {}", getString());
             long start = System.currentTimeMillis();
             render(getString(), filename);
             log.info("finished ({}ms)!", System.currentTimeMillis()-start);

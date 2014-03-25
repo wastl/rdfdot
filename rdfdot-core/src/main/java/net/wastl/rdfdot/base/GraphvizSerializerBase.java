@@ -235,7 +235,7 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
     }
 
     protected String graphvizColor(Color c) {
-        return String.format(Locale.US,"\"%.2f %.2f %.2f\"",(c.getRed()/255.0),(c.getGreen()/255.0),(c.getBlue()/255.0));
+        return String.format("\"#%x%x%x\"",c.getRed(),c.getGreen(),c.getBlue());
     }
 
 

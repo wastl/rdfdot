@@ -19,8 +19,10 @@
         <title>RDFDot: Visualize RDF Graphs</title>
 
         <link rel="stylesheet" href="webjars/bootstrap/3.1.1/css/bootstrap.css"/>
+        <link rel="stylesheet" href="css/colorpicker.css"/>
         <script src="webjars/angularjs/1.2.15/angular.js"></script>
         <script src="webjars/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.js"></script>
+        <script src="js/colorpicker.js"></script>
         <script src="js/controllers.js"></script>
 
         <!-- fix Bootstrap CSS for AngularJS -->
@@ -30,6 +32,11 @@
             body {
                 margin-left: 10%;
                 margin-right: 10%;
+            }
+
+            .colorpick, .colorpick:hover {
+                border: 1px solid #000000;
+                color: #000000;
             }
 
         </style>
@@ -48,12 +55,15 @@
                 <textarea class="form-control" rows="10" ng-model="data"></textarea>
             </div>
 
-            <div class="btn-group" style="float: right">
+            <div class="btn-group" style="float: right; margin-top: 5px;">
                 <button type="button" class="btn btn-primary" ng-click="submit()">Render</button>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 5px;">
                 <div class="col-md-1">
                     <select class="form-control" ng-model="configuration.input" ng-options="input for input in inputs"></select>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default" ng-click="show_configuration = !show_configuration">Configuration</button>
                 </div>
                 <!--
                 <div class="col-md-1">
@@ -61,6 +71,41 @@
                 </div>
                 -->
             </div>
+        </div>
+
+        <div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px;" ng-show="show_configuration">
+            <h2>Configuration</h2>
+
+            <table class="table">
+                <tr>
+                    <th></th><th>URIs</th><th>BNodes</th><th>Literals</th><th>Edges</th>
+                </tr>
+                <tr>
+                    <th>Shape</th>
+                    <td><select class="form-control" ng-model="configuration.uri_shape" ng-options="shape for shape in node_shapes"></select></td>
+                    <td><select class="form-control" ng-model="configuration.bnode_shape" ng-options="shape for shape in node_shapes"></select></td>
+                    <td><select class="form-control" ng-model="configuration.literal_shape" ng-options="shape for shape in node_shapes"></select></td>
+                    <td><select class="form-control" ng-model="configuration.arrow_shape" ng-options="shape for shape in arrow_shapes"></select></td>
+                </tr>
+                <tr>
+                    <th>Style</th>
+                    <td><select class="form-control" ng-model="configuration.uri_style" ng-options="shape for shape in node_styles"></select></td>
+                    <td><select class="form-control" ng-model="configuration.bnode_style" ng-options="shape for shape in node_styles"></select></td>
+                    <td><select class="form-control" ng-model="configuration.literal_style" ng-options="shape for shape in node_styles"></select></td>
+                    <td><select class="form-control" ng-model="configuration.arrow_style" ng-options="shape for shape in arrow_styles"></select></td>
+                </tr>
+                <tr>
+                    <th>Color</th>
+                    <td><div colorpicker="hex" ng-model="configuration.uri_fill" class="btn btn-primary colorpick" ng-style="uri_css">Choose</div></td>
+                    <td><div colorpicker="hex" ng-model="configuration.bnode_fill" class="btn btn-primary colorpick" ng-style="bnode_css">Choose</div></td>
+                    <td><div colorpicker="hex" ng-model="configuration.literal_fill" class="btn btn-primary colorpick" ng-style="literal_css">Choose</div></td>
+                    <td><div colorpicker="hex" ng-model="configuration.arrow_color" class="btn btn-primary colorpick"  ng-style="edge_css">Choose</div></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px;" ng-show="alerts.length > 0">
+            <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
         </div>
 
         <div class="container-fluid" ng-show="image">
