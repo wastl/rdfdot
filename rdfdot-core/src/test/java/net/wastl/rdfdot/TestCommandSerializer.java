@@ -54,7 +54,7 @@ public class TestCommandSerializer {
     public void testDefault() throws RDFParseException, IOException, RDFHandlerException {
         parser.parse(this.getClass().getResourceAsStream("/example1.ttl"),"");
 
-        File result = new File(FILENAME);
-        Assert.assertTrue(result.exists());
+        byte[] image = serializer.getResult();
+        Assert.assertTrue(image.length > 0);
     }
 }
