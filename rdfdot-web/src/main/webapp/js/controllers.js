@@ -121,5 +121,13 @@ rdfdotApp.controller("ConfigurationCtrl", function($scope,$http) {
         $scope.edge_css['background-color'] = $scope.configuration.arrow_color;
     });
 
+    $scope.examples = {
+        'foaf': '@prefix ex: <http://example.com/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n\nex:Alice a foaf:Person ;\n    foaf:firstName "Alice" ;\n    foaf:lastName  "Smith" ;\n    foaf:knows ex:Bob .\n        \nex:Bob a foaf:Person ;\n    foaf:firstName "Bob" ;\n    foaf:lastName  "Cook" ;\n    foaf:knows ex:Alice.\n',
+        'rdfs': '@prefix ex: <http://example.com/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:Student rdfs:subClassOf ex:Person.\n\nex:Professor rdfs:subClassOf ex:Person.\n\nex:Algorithms_and_Datastructures a ex:Lecture .\n\nex:Alice a ex:Professor ;\n    rdfs:label "Alice Smith" ;\n    ex:teaches ex:Algorithms_and_Datastructures .\n\nex:Bob a ex:Student ;\n    rdfs:label "Bob Cook" ;\n    ex:attends ex:Algorithms_and_Datastructures .\n'
+    };
+
+    $scope.selectExample = function(name) {
+        $scope.data = $scope.examples[name];
+    };
 });
 

@@ -65,6 +65,12 @@
                 <div class="col-md-1">
                     <button class="btn btn-default" ng-click="show_configuration = !show_configuration">Configuration</button>
                 </div>
+                <div class="col-md-1">
+                    <button class="btn btn-default dropdown-toggle">Examples</button>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="(name,example) in examples"><a ng-click="selectExample(name)">{{name}}</a></li>
+                    </ul>
+                </div>
                 <!--
                 <div class="col-md-1">
                     <select class="form-control" ng-model="configuration.output" ng-options="output for output in outputs"></select>
