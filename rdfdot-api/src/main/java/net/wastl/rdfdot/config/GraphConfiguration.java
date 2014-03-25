@@ -115,6 +115,9 @@ public class GraphConfiguration {
     private Map<String,String> namespaces;
 
 
+    private int maxNodes = 50;
+    private int maxEdges = 100;
+
     public GraphConfiguration() {
         // initialise default namespaces
         this.namespaces = new HashMap<>();
@@ -365,5 +368,22 @@ public class GraphConfiguration {
      */
     public void setLayout(Layouts layout) {
         this.layout = layout;
+    }
+
+
+    public int getMaxNodes() {
+        return maxNodes;
+    }
+
+    public void setMaxNodes(int maxNodes) {
+        this.maxNodes = maxNodes;
+    }
+
+    public int getMaxEdges() {
+        return maxEdges;
+    }
+
+    public void setMaxEdges(int maxEdges) {
+        this.maxEdges = maxEdges;
     }
 }

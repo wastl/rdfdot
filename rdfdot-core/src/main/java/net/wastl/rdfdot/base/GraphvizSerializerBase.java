@@ -20,6 +20,7 @@ import com.google.common.base.Strings;
 import net.wastl.rdfdot.GraphvizSerializer;
 import net.wastl.rdfdot.config.GraphConfiguration;
 import net.wastl.rdfdot.config.Styles;
+import net.wastl.rdfdot.exception.MaxSizeException;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openrdf.model.*;
@@ -107,6 +108,9 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
             literalNodes.add((Literal) v);
         }
 
+        if(uriNodes.size() + bnodeNodes.size() + literalNodes.size() > configuration.getMaxNodes()) {
+            throw new MaxSizeException("maximum number of nodes exceeded (max: "+configuration.getMaxNodes()+")");
+        }
     }
 
     /**
@@ -121,6 +125,10 @@ public abstract class GraphvizSerializerBase implements GraphvizSerializer {
         serializeNode(stmt.getObject());
 
         edges.add(stmt);
+
+        if(edges.size() > configuration.getMaxEdges()) {
+            throw new MaxSizeException("maximum number of edges exceeded (max: "+configuration.getMaxEdges()+")");
+        }
     }
 
     /**

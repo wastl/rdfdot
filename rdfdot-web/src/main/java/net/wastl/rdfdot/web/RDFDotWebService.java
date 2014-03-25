@@ -22,6 +22,7 @@ import net.wastl.rdfdot.config.Arrows;
 import net.wastl.rdfdot.config.GraphConfiguration;
 import net.wastl.rdfdot.config.Shapes;
 import net.wastl.rdfdot.config.Styles;
+import net.wastl.rdfdot.exception.MaxSizeException;
 import net.wastl.rdfdot.render.GraphvizSerializerCommand;
 import net.wastl.rdfdot.render.GraphvizSerializerNative;
 import org.apache.commons.codec.binary.Base64OutputStream;
@@ -126,6 +127,8 @@ public class RDFDotWebService {
         } catch (RDFHandlerException e) {
             return Response.serverError().entity(e.getMessage()).build();
         } catch (RDFParseException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (MaxSizeException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
