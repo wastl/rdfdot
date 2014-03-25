@@ -60,7 +60,7 @@ an appropriate location and call Java with -Djava.library.path=/path/to/location
 ## Configuration ##
 
 The rdfdot-api library contains a class GraphConfiguration, which can be used for setting layouting configuration
-options for the graph. It currentöy supports changing the node style, shape, color, and fillcolor for URI, BNode and
+options for the graph. It currently supports changing the node style, shape, color, and fillcolor for URI, BNode and
 Literal nodes, as well as the arrow shape, style and color for edges. Furthermore, it is possible to change the layout
 direction of the graph (default: left-right). All available options are defined using the enums Arrows, Layouts, Shapes
 and Styles.
@@ -77,11 +77,13 @@ RDFHandler, e.g.
 To initialize the RDFHandler, use e.g. the following sequence of statements:
 
         GraphConfiguration configuration = new GraphConfiguration();
-        GraphvizSerializer serializer = new GraphvizSerializerNative(configuration, filename);
+        GraphvizSerializer serializer = new GraphvizSerializerNative(configuration);
 
         RDFParser parser = Rio.createParser(RDFFormat.TURTLE);
         parser.setRDFHandler(new GraphvizHandler(serializer));
         parser.parse(in, "http://localhost/");
+
+        byte[] image = serializer.getResult();
 
 Different GraphSerializers are available, including GraphSerializerNative (using JNI calls) and GraphSerializerCommand
 (executing a shell command).
