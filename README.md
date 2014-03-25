@@ -42,7 +42,14 @@ for RDFdot. Note that this has only been tested to work on Linux.
 # Installing #
 
 RDFDot currently consists of the libraries rdfdot-api and rdfdot-core, which you can use in your own projects, and the
-web application rdfdot-web, which can be deployed in any Java web container.
+web application rdfdot-web, which can be deployed in any Java web container. When RDFDot has been properly installed,
+simply add the approprate Maven dependencies to your project:
+
+    <dependency>
+        <groupId>net.wastl.rdfdot</groupId>
+        <artifactId>rdfdot-core</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </dependency>
 
 If you want to use the (faster) JNI rendering library, it is necessary that you copy the libgraphviz.so library to
 an appropriate location and call Java with -Djava.library.path=/path/to/location.
