@@ -54,6 +54,7 @@ rdfdotApp.controller("ConfigurationCtrl", function($scope,$http) {
 
     $scope.submit = function() {
 
+        $scope.alerts = [];
 
         $http.post("render",$scope.data,{ 'params': $scope.configuration }).
             success(function(img) {
