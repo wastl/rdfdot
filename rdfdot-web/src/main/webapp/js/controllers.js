@@ -52,16 +52,20 @@ rdfdotApp.controller("ConfigurationCtrl", function($scope,$http) {
     $scope.image = null;
     $scope.alerts = [];
 
+    $scope.loader = false;
+
     $scope.submit = function() {
 
         $scope.alerts = [];
+        $scope.loader = true;
 
         $http.post("render",$scope.data,{ 'params': $scope.configuration }).
             success(function(img) {
-                console.log(img);
+                $scope.loader = false;
                 $scope.image = img;
             }).
             error(function(data,status) {
+                $scope.loader = false;
                 $scope.addAlert(data);
             });
     };

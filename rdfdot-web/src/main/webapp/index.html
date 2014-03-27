@@ -39,6 +39,10 @@
                 color: #000000;
             }
 
+            .infobox {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
         </style>
     </head>
 
@@ -110,7 +114,11 @@
             </table>
         </div>
 
-        <div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px;" ng-show="alerts.length > 0">
+        <div class="container-fluid infobox" ng-show="loader">
+            <progressbar class="progress-striped active" value="100" type="info">Rendering ...</progressbar>
+        </div>
+
+        <div class="container-fluid infobox" ng-show="alerts.length > 0">
             <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
         </div>
 
